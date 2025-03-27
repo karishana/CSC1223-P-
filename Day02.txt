@@ -1,0 +1,244 @@
+# mysql -u root -p
+Enter password:
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 8
+Server version: 10.4.32-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> use uov;
+Database changed
+MariaDB [uov]> create table Patient(Patientid varchar(30), Name varchar(30), Address varchar(30), phone int);
+Query OK, 0 rows affected (0.008 sec)
+
+MariaDB [uov]> describe;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 1
+MariaDB [uov]> DESCPatient;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'DESCPatient' at line 1
+MariaDB [uov]> DESC Patient;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| Patientid | varchar(30) | YES  |     | NULL    |       |
+| Name      | varchar(30) | YES  |     | NULL    |       |
+| Address   | varchar(30) | YES  |     | NULL    |       |
+| phone     | int(11)     | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+4 rows in set (0.014 sec)
+
+MariaDB [uov]> create table Patients(Patientid int Primarykey, Name varchar(30), Address varchar(30), Phone varchar(30);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ' Name varchar(30), Address varchar(30), Phone varchar(30)' at line 1
+MariaDB [uov]> create table Patients(Patientid int Primarykey, Name varchar(30), Address varchar(30), Phone varchar(30));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ' Name varchar(30), Address varchar(30), Phone varchar(30))' at line 1
+MariaDB [uov]> create table Patients(Patientid int Primary key, Name varchar(30), Address varchar(30), Phone varchar(30));
+Query OK, 0 rows affected (0.011 sec)
+
+MariaDB [uov]> DESC Patients;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| Patientid | int(11)     | NO   | PRI | NULL    |       |
+| Name      | varchar(30) | YES  |     | NULL    |       |
+| Address   | varchar(30) | YES  |     | NULL    |       |
+| Phone     | varchar(30) | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+4 rows in set (0.014 sec)
+
+MariaDB [uov]> INSERT INTO Patients(Patientid, Name, Address, Phone) VALUES
+    -> (100000001,'John Smith','42 Foobar Lane','555-0256'),
+    -> (100000002,'Grace Ritchie','37 Snafu Drive','555-0512'),
+    -> (100000003,'Todd Quinlan','101 Ombbq Street','555-1204'),
+    -> (1000000004,'Dennis Doe','1100 Foobaz Avenue','555-2048');
+Query OK, 4 rows affected (0.038 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+MariaDB [uov]> select * from Patients;
++------------+---------------+--------------------+----------+
+| Patientid  | Name          | Address            | Phone    |
++------------+---------------+--------------------+----------+
+|  100000001 | John Smith    | 42 Foobar Lane     | 555-0256 |
+|  100000002 | Grace Ritchie | 37 Snafu Drive     | 555-0512 |
+|  100000003 | Todd Quinlan  | 101 Ombbq Street   | 555-1204 |
+| 1000000004 | Dennis Doe    | 1100 Foobaz Avenue | 555-2048 |
++------------+---------------+--------------------+----------+
+4 rows in set (0.000 sec)
+
+MariaDB [uov]> delete  from Patients;
+Query OK, 4 rows affected (0.004 sec)
+
+MariaDB [uov]> DESC Patients;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| Patientid | int(11)     | NO   | PRI | NULL    |       |
+| Name      | varchar(30) | YES  |     | NULL    |       |
+| Address   | varchar(30) | YES  |     | NULL    |       |
+| Phone     | varchar(30) | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+4 rows in set (0.013 sec)
+
+MariaDB [uov]> INSERT INTO Patients(Patientid, Name, Address, Phone) VALUES
+    ->     -> (100000001,'John Smith','42 Foobar Lane','555-0256'),
+    ->     -> (100000002,'Grace Ritchie','37 Snafu Drive','555-0512'),
+    ->     -> (100000003,'Todd Quinlan','101 Ombbq Street','555-1204'),
+    ->     -> (100000004,'Dennis Doe','1100 Foobaz Avenue','555-2048');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '-> (100000001,'John Smith','42 Foobar Lane','555-0256'),
+    -> (100000002,'G...' at line 2
+MariaDB [uov]> INSERT INTO Patients(Patientid, Name, Address, Phone) VALUES
+    ->     -> (100000001,'John Smith','42 Foobar Lane','555-0256'),
+    ->     -> (100000002,'Grace Ritchie','37 Snafu Drive','555-0512'),
+    ->     -> (100000003,'Todd Quinlan','101 Ombbq Street','555-1204'),
+    ->     -> (100000002,'Grace Ritchie','37 Snafu Drive','555-0512');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '-> (100000001,'John Smith','42 Foobar Lane','555-0256'),
+    -> (100000002,'G...' at line 2
+MariaDB [uov]>  INSERT INTO Patients(Patientid, Name, Address, Phone) VALUES
+    -> (100000001,'John Smith','42 Foobar Lane','555-0256'),
+    -> (100000002,'Grace Ritchie','37 Snafu Drive','555-0512'),
+    -> (100000003,'Todd Quinlan','101 Ombbq Street','555-1204'),
+    -> (100000004,'Dennis Doe','1100 Foobaz Avenue','555-2048');
+Query OK, 4 rows affected (0.004 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+MariaDB [uov]> select * from Patients;
++-----------+---------------+--------------------+----------+
+| Patientid | Name          | Address            | Phone    |
++-----------+---------------+--------------------+----------+
+| 100000001 | John Smith    | 42 Foobar Lane     | 555-0256 |
+| 100000002 | Grace Ritchie | 37 Snafu Drive     | 555-0512 |
+| 100000003 | Todd Quinlan  | 101 Ombbq Street   | 555-1204 |
+| 100000004 | Dennis Doe    | 1100 Foobaz Avenue | 555-2048 |
++-----------+---------------+--------------------+----------+
+4 rows in set (0.000 sec)
+
+MariaDB [uov]> create databases icae2;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'databases icae2' at line 1
+MariaDB [uov]> show databases;
++--------------------+
+| Database           |
++--------------------+
+| bfl                |
+| bookboat           |
+| bookstore          |
+| company            |
+| employee           |
+| englishfi          |
+| icae02             |
+| information_schema |
+| inventory          |
+| kavinda            |
+| kavindaprac        |
+| moviedb            |
+| mybookstore        |
+| mysql              |
+| parkingapp         |
+| performance_schema |
+| phpmyadmin         |
+| studentdb          |
+| test               |
+| uov                |
+| uovlib             |
++--------------------+
+21 rows in set (0.041 sec)
+
+MariaDB [uov]> DROP database icae2;
+ERROR 1008 (HY000): Can't drop database 'icae2'; database doesn't exist
+MariaDB [uov]> DROP database icae02;
+Query OK, 1 row affected (0.030 sec)
+
+MariaDB [uov]> show databases;
++--------------------+
+| Database           |
++--------------------+
+| bfl                |
+| bookboat           |
+| bookstore          |
+| company            |
+| employee           |
+| englishfi          |
+| information_schema |
+| inventory          |
+| kavinda            |
+| kavindaprac        |
+| moviedb            |
+| mybookstore        |
+| mysql              |
+| parkingapp         |
+| performance_schema |
+| phpmyadmin         |
+| studentdb          |
+| test               |
+| uov                |
+| uovlib             |
++--------------------+
+20 rows in set (0.001 sec)
+
+20 rows in set (0.001 sec)
+
+MariaDB [uov]> create table Grade(id int Primary key, name varchar(30), age int, grade char(1), city varchar(20));
+Query OK, 0 rows affected (0.010 sec)
+
+MariaDB [uov]> DESC Grade;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| id    | int(11)     | NO   | PRI | NULL    |       |
+| name  | varchar(30) | YES  |     | NULL    |       |
+| age   | int(11)     | YES  |     | NULL    |       |
+| grade | char(1)     | YES  |     | NULL    |       |
+| city  | varchar(20) | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+5 rows in set (0.015 sec)
+
+MariaDB [uov]> INSERT INTO Grade(id, name, age, grade,city) VALUES
+    -> (1,'Alice',20,'A','New York'),
+    ->
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 2
+MariaDB [uov]> DESC Grade;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| id    | int(11)     | NO   | PRI | NULL    |       |
+| name  | varchar(30) | YES  |     | NULL    |       |
+| age   | int(11)     | YES  |     | NULL    |       |
+| grade | char(1)     | YES  |     | NULL    |       |
+| city  | varchar(20) | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+5 rows in set (0.015 sec)
+
+MariaDB [uov]> LOAD DATA LOCAL INFILE 'C:\Users\TEMP\Desktop\CSC1123/day2/day2.csv'
+    -> INTO TABLE Grade
+    -> FIELDS TERMINATED BY '\t'
+    -> LINES TERMINATED BY '\n'
+    -> (id, name, age, grade, city);
+ERROR 2 (HY000): File 'C:UsersTEMPDesktopCSC1123/day2/day2.csv' not found (Errcode: 2)
+MariaDB [uov]> LOAD DATA LOCAL INFILE 'C:/Users/TEMP/Desktop/CSC1123/day2/day2.csv'
+    -> INTO TABLE Grade
+    -> FIELDS TERMINATED BY '\t'
+    -> LINES TERMINATED BY '\n'
+    -> (id, name, age, grade, city);
+ERROR 2 (HY000): File 'C:/Users/TEMP/Desktop/CSC1123/day2/day2.csv' not found (Errcode: 2)
+MariaDB [uov]> LOAD DATA LOCAL INFILE 'C:/Users/TEMP/Desktop/CSC1123/day2.csv'
+    -> INTO TABLE Grade
+    -> FIELDS TERMINATED BY '\t'
+    -> LINES TERMINATED BY '\n'
+    -> (id, name, age, grade, city);
+Query OK, 6 rows affected, 3 warnings (0.005 sec)
+Records: 6  Deleted: 0  Skipped: 0  Warnings: 3
+
+MariaDB [uov]> select * from Grade;
++----+---------+------+-------+--------------+
+| id | name    | age  | grade | city         |
++----+---------+------+-------+--------------+
+     | Alice   |   20 | A     | Newyork
+|  2 | Bob     |    0 | 2     | B            |
+    || Charlie |   21 | A     | New York
+      |David   |   23 | C     | Boston
+     | Emma    |   22 | B     | Chicago
+ | 6 | Frank   |   20 | A     | Los Angeles
++----+---------+------+-------+--------------+
+6 rows in set (0.000 sec)
+
+MariaDB [uov]>
