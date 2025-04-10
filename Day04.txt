@@ -1,0 +1,260 @@
+MariaDB [(none)]> use uov;
+Database changed
+MariaDB [uov]> create table employees(emp_id int Primary key, name varchar(30), age int, department varchar(20), salary double, city varchar(30));
+Query OK, 0 rows affected (0.009 sec)
+
+MariaDB [uov]> DESC employees;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| emp_id     | int(11)     | NO   | PRI | NULL    |       |
+| name       | varchar(30) | YES  |     | NULL    |       |
+| age        | int(11)     | YES  |     | NULL    |       |
+| department | varchar(20) | YES  |     | NULL    |       |
+| salary     | double      | YES  |     | NULL    |       |
+| city       | varchar(30) | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+6 rows in set (0.018 sec)
+
+MariaDB [uov]> INSERT INTO employees VALUES
+    -> (101,'Alice',30,'HR',60000.00,'New York'),
+    -> (102,'Bob',28,'IT',75000.00,'Los Angles'),
+    -> (103,'Charli',35,'Finance',80000.00,'Chicago'),
+    -> (104,'David',40,'IT',90000.00,'San francisco'),
+    -> (105,'Emma',32,'Marketing',70000.00,'New York'),
+    -> (106,'Frank',27,'HR',50000.00,'Chicago');
+Query OK, 6 rows affected (0.043 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+MariaDB [uov]> select * from employees;
++--------+--------+------+------------+--------+---------------+
+| emp_id | name   | age  | department | salary | city          |
++--------+--------+------+------------+--------+---------------+
+|    101 | Alice  |   30 | HR         |  60000 | New York      |
+|    102 | Bob    |   28 | IT         |  75000 | Los Angles    |
+|    103 | Charli |   35 | Finance    |  80000 | Chicago       |
+|    104 | David  |   40 | IT         |  90000 | San francisco |
+|    105 | Emma   |   32 | Marketing  |  70000 | New York      |
+|    106 | Frank  |   27 | HR         |  50000 | Chicago       |
++--------+--------+------+------------+--------+---------------+
+6 rows in set (0.003 sec)
+MariaDB [uov]> alter table employees modify salary double(10,2);
+Query OK, 0 rows affected (0.017 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [uov]> select * from employees;
++--------+--------+------+------------+----------+---------------+
+| emp_id | name   | age  | department | salary   | city          |
++--------+--------+------+------------+----------+---------------+
+|    101 | Alice  |   30 | HR         | 60000.00 | New York      |
+|    102 | Bob    |   28 | IT         | 75000.00 | Los Angles    |
+|    103 | Charli |   35 | Finance    | 80000.00 | Chicago       |
+|    104 | David  |   40 | IT         | 90000.00 | San francisco |
+|    105 | Emma   |   32 | Marketing  | 70000.00 | New York      |
+|    106 | Frank  |   27 | HR         | 50000.00 | Chicago       |
++--------+--------+------+------------+----------+---------------+
+6 rows in set (0.001 sec)
+MariaDB [uov]> select name,salary from employees;
++--------+----------+
+| name   | salary   |
++--------+----------+
+| Alice  | 60000.00 |
+| Bob    | 75000.00 |
+| Charli | 80000.00 |
+| David  | 90000.00 |
+| Emma   | 70000.00 |
+| Frank  | 50000.00 |
++--------+----------+
+6 rows in set (0.000 sec)
+
+MariaDB [uov]> select DISTINCT department from employees;
++------------+
+| department |
++------------+
+| HR         |
+| IT         |
+| Finance    |
+| Marketing  |
++------------+
+4 rows in set (0.000 sec)
+
+MariaDB [uov]> select * from employees where department='IT';
++--------+-------+------+------------+----------+---------------+
+| emp_id | name  | age  | department | salary   | city          |
++--------+-------+------+------------+----------+---------------+
+|    102 | Bob   |   28 | IT         | 75000.00 | Los Angles    |
+|    104 | David |   40 | IT         | 90000.00 | San francisco |
++--------+-------+------+------------+----------+---------------+
+2 rows in set (0.001 sec)
+MariaDB [uov]> select * from employees where salary>70000;
++--------+--------+------+------------+----------+---------------+
+| emp_id | name   | age  | department | salary   | city          |
++--------+--------+------+------------+----------+---------------+
+|    102 | Bob    |   28 | IT         | 75000.00 | Los Angles    |
+|    103 | Charli |   35 | Finance    | 80000.00 | Chicago       |
+|    104 | David  |   40 | IT         | 90000.00 | San francisco |
++--------+--------+------+------------+----------+---------------+
+3 rows in set (0.001 sec)
+
+MariaDB [uov]> select * from employees where age between 30 and 40;
++--------+--------+------+------------+----------+---------------+
+| emp_id | name   | age  | department | salary   | city          |
++--------+--------+------+------------+----------+---------------+
+|    101 | Alice  |   30 | HR         | 60000.00 | New York      |
+|    103 | Charli |   35 | Finance    | 80000.00 | Chicago       |
+|    104 | David  |   40 | IT         | 90000.00 | San francisco |
+|    105 | Emma   |   32 | Marketing  | 70000.00 | New York      |
++--------+--------+------+------------+----------+---------------+
+4 rows in set (0.003 sec)
+
+MariaDB [uov]> select * from employees where city='new York' or 'Chicago';
++--------+-------+------+------------+----------+----------+
+| emp_id | name  | age  | department | salary   | city     |
++--------+-------+------+------------+----------+----------+
+|    101 | Alice |   30 | HR         | 60000.00 | New York |
+|    105 | Emma  |   32 | Marketing  | 70000.00 | New York |
++--------+-------+------+------------+----------+----------+
+2 rows in set, 5 warnings (0.000 sec)
+
+MariaDB [uov]> select * from employees where city in('new York','Chicago');
++--------+--------+------+------------+----------+----------+
+| emp_id | name   | age  | department | salary   | city     |
++--------+--------+------+------------+----------+----------+
+|    101 | Alice  |   30 | HR         | 60000.00 | New York |
+|    103 | Charli |   35 | Finance    | 80000.00 | Chicago  |
+|    105 | Emma   |   32 | Marketing  | 70000.00 | New York |
+|    106 | Frank  |   27 | HR         | 50000.00 | Chicago  |
++--------+--------+------+------------+----------+----------+
+4 rows in set (0.000 sec)
+
+
+INSERT INTO Product_Relation VALUES
+(1,'Ultra HD Television','Electronics',1200,30),
+(2,'Running Shoes','Footwear',100,50),
+(3,'Electric Kettel','Appliances',45,25),
+(4,'Denim Jeans','Clothing',60,40),
+(5,'Bluethooth Headphones','Electronics',150,15);
+
+MariaDB [uov]> select * from Product_Relation;
++-----------+-----------------------+-------------+-------+---------------+
+| ProductID | Name                  | Category    | Price | StockQuantity |
++-----------+-----------------------+-------------+-------+---------------+
+|         1 | Ultra HD Television   | Electronics |  1200 |            30 |
+|         2 | Running Shoes         | Footwear    |   100 |            50 |
+|         3 | Electric Kettel       | Appliances  |    45 |            25 |
+|         4 | Denim Jeans           | Clothing    |    60 |            40 |
+|         5 | Bluethooth Headphones | Electronics |   150 |            15 |
++-----------+-----------------------+-------------+-------+---------------+
+5 rows in set (0.000 sec)
+
+create table Customer_Relation(CustomerID int Primary key, FullName varchar(30), RegestrationDate date, PhoneNumber varchar(30));
+
+INSERT INTO Customer_Relation VALUES
+(1,'Alice Jhonson','2021-03-15','+1234567890'),
+(2,'Bob Smith','2020-08-24','+0987654321'),
+(3,'Carol Brown','2022-01-10','+1122334455'),
+(4,'Dave Wilson','2021-07-02','+2233445566'),
+(5,'Eve Devis','2020-11-29','+3344556677');
+
+MariaDB [uov]> select * from Customer_Relation;
++------------+---------------+------------------+-------------+
+| CustomerID | FullName      | RegestrationDate | PhoneNumber |
++------------+---------------+------------------+-------------+
+|          1 | Alice Jhonson | 2021-03-15       | +1234567890 |
+|          2 | Bob Smith     | 2020-08-24       | +0987654321 |
+|          3 | Carol Brown   | 2022-01-10       | +1122334455 |
+|          4 | Dave Wilson   | 2021-07-02       | +2233445566 |
+|          5 | Eve Devis     | 2020-11-29       | +3344556677 |
++------------+---------------+------------------+-------------+
+5 rows in set (0.000 sec)
+
+create table Sales_Relation(SalesID int Primary key, ProductID int, CustomerID int, SalesDate date, QuantitySold int);
+INSERT INTO Sales_Relation VALUES
+(1,1,1,'2023-06-15',1),
+(2,2,2,'2023-06-18',2),
+(3,3,3,'2023-06-20',1),
+(4,4,4,'2023-06-25',3),
+(5,5,5,'2023-06-30',2);
+
+MariaDB [uov]> select * from  Sales_Relation;
++---------+-----------+------------+------------+--------------+
+| SalesID | ProductID | CustomerID | SalesDate  | QuantitySold |
++---------+-----------+------------+------------+--------------+
+|       1 |         1 |          1 | 2023-06-15 |            1 |
+|       2 |         2 |          2 | 2023-06-18 |            2 |
+|       3 |         3 |          3 | 2023-06-20 |            1 |
+|       4 |         4 |          4 | 2023-06-25 |            3 |
+|       5 |         5 |          5 | 2023-06-30 |            2 |
++---------+-----------+------------+------------+--------------+
+5 rows in set (0.000 sec)
+
+MariaDB [uov]> select Name from Product_Relation;
++-----------------------+
+| Name                  |
++-----------------------+
+| Ultra HD Television   |
+| Running Shoes         |
+| Electric Kettel       |
+| Denim Jeans           |
+| Bluethooth Headphones |
++-----------------------+
+5 rows in set (0.000 sec)
+
+MariaDB [uov]> select CustomerID,RegestrationDate from Customer_Relation;
++------------+------------------+
+| CustomerID | RegestrationDate |
++------------+------------------+
+|          1 | 2021-03-15       |
+|          2 | 2020-08-24       |
+|          3 | 2022-01-10       |
+|          4 | 2021-07-02       |
+|          5 | 2020-11-29       |
++------------+------------------+
+5 rows in set (0.000 sec)
+
+MariaDB [uov]> select  SalesID,SalesDate from Sales_Relation where QuantitySold='2';
++---------+------------+
+| SalesID | SalesDate  |
++---------+------------+
+|       2 | 2023-06-18 |
+|       5 | 2023-06-30 |
++---------+------------+
+2 rows in set (0.000 sec)
+
+MariaDB [uov]> select Name from Product_Relation where Price > 100;
++-----------------------+
+| Name                  |
++-----------------------+
+| Ultra HD Television   |
+| Bluethooth Headphones |
++-----------------------+
+2 rows in set (0.000 sec)
+
+MariaDB [uov]> select CustomerID from Customer_Relation where  RegestrationDate < '2021-01-01';
++------------+
+| CustomerID |
++------------+
+|          2 |
+|          5 |
++------------+
+2 rows in set (0.000 sec)
+
+MariaDB [uov]> select CustomerID from Customer_Relation where year(RegestrationDate) < '2021';
++------------+
+| CustomerID |
++------------+
+|          2 |
+|          5 |
++------------+
+2 rows in set (0.000 sec)
+
+MariaDB [uov]> select DISTINCT  Category from Product_Relation;
++-------------+
+| Category    |
++-------------+
+| Electronics |
+| Footwear    |
+| Appliances  |
+| Clothing    |
++-------------+
+4 rows in set (0.000 sec)
