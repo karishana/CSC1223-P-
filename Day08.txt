@@ -1,0 +1,171 @@
+part B
+(1)
+ desc Movie;
++-----------------+--------------+------+-----+---------+-------+
+| Field           | Type         | Null | Key | Default | Extra |
++-----------------+--------------+------+-----+---------+-------+
+| Movie_ID        | int(11)      | NO   | PRI | NULL    |       |
+| Title           | varchar(50)  | YES  |     | NULL    |       |
+| cateogory       | varchar(50)  | YES  |     | NULL    |       |
+| PublicationDate | date         | YES  |     | NULL    |       |
+| Director        | varchar(50)  | YES  |     | NULL    |       |
+| Rating          | double(10,1) | YES  |     | NULL    |       |
+| Minutes         | int(11)      | YES  |     | NULL    |       |
++-----------------+--------------+------+-----+---------+-------+
+(ii)
+SELECT * FROM Movie;
++----------+--------------------+-----------+-----------------+--------------------+--------+---------+
+| Movie_ID | Title              | cateogory | PublicationDate | Director           | Rating | Minutes |
++----------+--------------------+-----------+-----------------+--------------------+--------+---------+
+|        1 | Hotel Transylvania | Animation | 2012-09-28      | Genndy Tartakovsky |    7.0 |      91 |
+|        2 | Jurassic Park      | Adventure | 1993-06-11      | Steven Spielberg   |    8.2 |     127 |
+|        3 | Home Alone         | Family    | 1990-11-16      | Chris Columbus     |    7.7 |     103 |
+|        4 | Hugo               | Drama     | 2011-11-23      | Martin Scorsese    |    7.5 |     126 |
+|        5 | 3 Idiots           | Comedy    | 2009-12-25      | Rajkumar Hirani    |    8.4 |     170 |
+|        6 | The Avengers       | Sci-Fi    | 2012-05-04      | Joss Whedon        |    8.0 |     143 |
+|        7 | Avatar             | Adventure | 2009-12-18      | James Cameron      |    7.9 |     162 |
+|        8 | Luca               | Animation | 2021-06-18      | Enrico Casarosa    |    7.4 |      95 |
+|        9 | The Dark Knight    | Drama     | 2008-07-18      | Christopher Nolan  |    9.0 |     152 |
+|       10 | Titanic            | Romance   | 1997-12-19      | James Cameron      |    7.9 |     195 |
++----------+--------------------+-----------+-----------------+--------------------+--------+---------+
+(iii)
+SELECT Title,Cateogory FROM Movie;
++--------------------+-----------+
+| Title              | Cateogory |
++--------------------+-----------+
+| Hotel Transylvania | Animation |
+| Jurassic Park      | Adventure |
+| Home Alone         | Family    |
+| Hugo               | Drama     |
+| 3 Idiots           | Comedy    |
+| The Avengers       | Sci-Fi    |
+| Avatar             | Adventure |
+| Luca               | Animation |
+| The Dark Knight    | Drama     |
+| Titanic            | Romance   |
++--------------------+-----------+
+(iv)
+SELECT DISTINCT Director FROM Movie;
++--------------------+
+| Director           |
++--------------------+
+| Genndy Tartakovsky |
+| Steven Spielberg   |
+| Chris Columbus     |
+| Martin Scorsese    |
+| Rajkumar Hirani    |
+| Joss Whedon        |
+| James Cameron      |
+| Enrico Casarosa    |
+| Christopher Nolan  |
++--------------------+
+(v)
+ SELECT Title FROM Movie WHERE Rating > 7.5;
++-----------------+
+| Title           |
++-----------------+
+| Jurassic Park   |
+| Home Alone      |
+| 3 Idiots        |
+| The Avengers    |
+| Avatar          |
+| The Dark Knight |
+| Titanic         |
++-----------------+
+(vi)
+SELECT AVG(Minutes) AS Duration FROM Movie;
++----------+
+| Duration |
++----------+
+| 136.4000 |
++----------+
+(vii)
+ UPDATE Movie
+    -> SET Cateogory = 'Action'
+    -> WHERE Movie_ID = 9;
+SELECT * FROM Movie;
++----------+--------------------+-----------+-----------------+--------------------+--------+---------+
+| Movie_ID | Title              | cateogory | PublicationDate | Director           | Rating | Minutes |
++----------+--------------------+-----------+-----------------+--------------------+--------+---------+
+|        1 | Hotel Transylvania | Animation | 2012-09-28      | Genndy Tartakovsky |    7.0 |      91 |
+|        2 | Jurassic Park      | Adventure | 1993-06-11      | Steven Spielberg   |    8.2 |     127 |
+|        3 | Home Alone         | Family    | 1990-11-16      | Chris Columbus     |    7.7 |     103 |
+|        4 | Hugo               | Drama     | 2011-11-23      | Martin Scorsese    |    7.5 |     126 |
+|        5 | 3 Idiots           | Comedy    | 2009-12-25      | Rajkumar Hirani    |    8.4 |     170 |
+|        6 | The Avengers       | Sci-Fi    | 2012-05-04      | Joss Whedon        |    8.0 |     143 |
+|        7 | Avatar             | Adventure | 2009-12-18      | James Cameron      |    7.9 |     162 |
+|        8 | Luca               | Animation | 2021-06-18      | Enrico Casarosa    |    7.4 |      95 |
+|        9 | The Dark Knight    | Action    | 2008-07-18      | Christopher Nolan  |    9.0 |     152 |
+|       10 | Titanic            | Romance   | 1997-12-19      | James Cameron      |    7.9 |     195 |
++----------+--------------------+-----------+-----------------+--------------------+--------+---------+
+(viii)
+  SELECT Title,year(PublicationDate) FROM Movie WHERE Director = 'James Cameron';
++---------+-----------------------+
+| Title   | year(PublicationDate) |
++---------+-----------------------+
+| Avatar  |                  2009 |
+| Titanic |                  1997 |
++---------+-----------------------+
+(ix)
+SELECT SUM(Minutes) AS Total FROM Movie WHERE Title LIKE '%e%';
++-------+
+| Total |
++-------+
+|   489 |
++-------+
+(x)
+SELECT Movie_Id ,PublicationDate FROM Movie WHERE Rating BETWEEN 7.2 AND 8.2;
++----------+-----------------+
+| Movie_Id | PublicationDate |
++----------+-----------------+
+|        2 | 1993-06-11      |
+|        3 | 1990-11-16      |
+|        4 | 2011-11-23      |
+|        6 | 2012-05-04      |
+|        7 | 2009-12-18      |
+|        8 | 2021-06-18      |
+|       10 | 1997-12-19      |
++----------+-----------------+
+(xi)
+SELECT Cateogory, MAX(Rating)
+    -> FROM Movie
+    -> GROUP BY Cateogory
+    -> ORDER BY MAX(Rating) DESC;
++-----------+-------------+
+| Cateogory | MAX(Rating) |
++-----------+-------------+
+| Action    |         9.0 |
+| Comedy    |         8.4 |
+| Adventure |         8.2 |
+| Sci-Fi    |         8.0 |
+| Romance   |         7.9 |
+| Family    |         7.7 |
+| Drama     |         7.5 |
+| Animation |         7.4 |
++-----------+-------------+
+SELECT Cateogory, MAX(Rating)
+    -> FROM Movie
+    -> GROUP BY Cateogory
+    -> ORDER BY MAX(Rating) DESC
+    -> LIMIT 1;
++-----------+-------------+
+| Cateogory | MAX(Rating) |
++-----------+-------------+
+| Action    |         9.0 |
++-----------+-------------+
+(xii)
+SELECT CONCAT(Title,"-",year(PublicationDate)) AS CombinedTitle FROM Movie;
++-------------------------+
+| CombinedTitle           |
++-------------------------+
+| Hotel Transylvania-2012 |
+| Jurassic Park-1993      |
+| Home Alone-1990         |
+| Hugo-2011               |
+| 3 Idiots-2009           |
+| The Avengers-2012       |
+| Avatar-2009             |
+| Luca-2021               |
+| The Dark Knight-2008    |
+| Titanic-1997            |
++-------------------------+
