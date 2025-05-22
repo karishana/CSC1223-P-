@@ -1,0 +1,308 @@
+INSERT INTO Sales VALUES
+(1,'Alice','North',1200,'2024-12-01'),
+(2,'Bob','South',800,'2024-12-01'),
+(3,'Alice','North',1500,'2024-12-02'),
+(4,'Carol','East',700,'2024-12-02'),
+(5,'Dave','West',2000,'2024-12-03'),
+(6,'Bob','South',950,'2024-12-03'),
+(7,'Carol','East',1300,'2024-12-04');
+
+MariaDB [company]> INSERT INTO Sales VALUES
+    -> (1,'Alice','North',1200,'2024-12-01'),
+    -> (2,'Bob','South',800,'2024-12-01'),
+    -> (3,'Alice','North',1500,'2024-12-02'),
+    -> (4,'Carol','East',700,'2024-12-02'),
+    -> (5,'Dave','West',2000,'2024-12-03'),
+    -> (6,'Bob','South',950,'2024-12-03'),
+    -> (7,'Carol','East',1300,'2024-12-04');
+Query OK, 7 rows affected (0.038 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+MariaDB [company]> select * from Sales;
++----------+-------------+--------+--------------+------------+
+| Sales_is | Salesperson | Region | Sales_amount | Sales_Date |
++----------+-------------+--------+--------------+------------+
+|        1 | Alice       | North  |         1200 | 2024-12-01 |
+|        2 | Bob         | South  |          800 | 2024-12-01 |
+|        3 | Alice       | North  |         1500 | 2024-12-02 |
+|        4 | Carol       | East   |          700 | 2024-12-02 |
+|        5 | Dave        | West   |         2000 | 2024-12-03 |
+|        6 | Bob         | South  |          950 | 2024-12-03 |
+|        7 | Carol       | East   |         1300 | 2024-12-04 |
++----------+-------------+--------+--------------+------------+
+7 rows in set (0.000 sec)
+
+MariaDB [company]> select sum(Sales_amount) from Sales;
++-------------------+
+| sum(Sales_amount) |
++-------------------+
+|              8450 |
++-------------------+
+1 row in set (0.000 sec)
+
+MariaDB [company]> select count(*) from Sales;
++----------+
+| count(*) |
++----------+
+|        7 |
++----------+
+1 row in set (0.000 sec)
+
+MariaDB [company]> select avg(Sales_amount) from Sales;
++-------------------+
+| avg(Sales_amount) |
++-------------------+
+|         1207.1429 |
++-------------------+
+1 row in set (0.000 sec)
+
+MariaDB [company]> select max(Sales_amount) from Sales;
++-------------------+
+| max(Sales_amount) |
++-------------------+
+|              2000 |
++-------------------+
+1 row in set (0.001 sec)
+
+MariaDB [company]> select min(Sales_amount) from Sales;
++-------------------+
+| min(Sales_amount) |
++-------------------+
+|               700 |
++-------------------+
+1 row in set (0.000 sec)
+MariaDB [company]> select Salesperson, count(*) from Sales
+    -> group by Salesperson;
++-------------+----------+
+| Salesperson | count(*) |
++-------------+----------+
+| Alice       |        2 |
+| Bob         |        2 |
+| Carol       |        2 |
+| Dave        |        1 |
++-------------+----------+
+4 rows in set (0.001 sec)
+
+MariaDB [company]> select Region, count(*) from Sales
+    -> group by Region;
++--------+----------+
+| Region | count(*) |
++--------+----------+
+| East   |        2 |
+| North  |        2 |
+| South  |        2 |
+| West   |        1 |
++--------+----------+
+4 rows in set (0.000 sec)
+MariaDB [company]> select Region, sum(Sales_amount) from Sales
+    -> group by Region;
++--------+-------------------+
+| Region | sum(Sales_amount) |
++--------+-------------------+
+| East   |              2000 |
+| North  |              2700 |
+| South  |              1750 |
+| West   |              2000 |
++--------+-------------------+
+4 rows in set (0.000 sec)
+MariaDB [company]> select Region, sum(Sales_amount)
+    -> from Sales
+    -> group by Region
+    -> having sum(Sales_amount)>2000;
++--------+-------------------+
+| Region | sum(Sales_amount) |
++--------+-------------------+
+| North  |              2700 |
++--------+-------------------+
+1 row in set (0.001 sec)
+MariaDB [company]> select distinct Salesperson from Sales;
++-------------+
+| Salesperson |
++-------------+
+| Alice       |
+| Bob         |
+| Carol       |
+| Dave        |
++-------------+
+
+MariaDB [company]> select count(distinct salesperson) from Sales;
++-----------------------------+
+| count(distinct salesperson) |
++-----------------------------+
+|                           4 |
++-----------------------------+
+1 row in set (0.001 sec)
+MariaDB [company]> select sum(Sales_amount) from Sales where Salesperson = 'Alice';
++-------------------+
+| sum(Sales_amount) |
++-------------------+
+|              2700 |
++-------------------+
+1 row in set (0.000 sec)
+
+MariaDB [company]> select Region, avg(Sales_amount)
+    -> from Sales
+    -> Group by Region;
++--------+-------------------+
+| Region | avg(Sales_amount) |
++--------+-------------------+
+| East   |         1000.0000 |
+| North  |         1350.0000 |
+| South  |          875.0000 |
+| West   |         2000.0000 |
++--------+-------------------+
+4 rows in set (0.000 sec)
+
+MariaDB [company]>
+MariaDB [company]> select Sales_Date, count(*)
+    -> from Sales
+    -> group by Sales_Date;
++------------+----------+
+| Sales_Date | count(*) |
++------------+----------+
+| 2024-12-01 |        2 |
+| 2024-12-02 |        2 |
+| 2024-12-03 |        2 |
+| 2024-12-04 |        1 |
++------------+----------+
+4 rows in set (0.000 sec)
+
+MariaDB [company]> select Salesperson from Sales
+    -> order by Sales_amount
+    -> limit 1;
++-------------+
+| Salesperson |
++-------------+
+| Carol       |
++-------------+
+1 row in set (0.000 sec)
+
+MariaDB [company]> select Salesperson from Sales
+    -> order by Sales_amount desc
+    -> limit 1;
++-------------+
+| Salesperson |
++-------------+
+| Dave        |
++-------------+
+1 row in set (0.000 sec)
+
+MariaDB [company]> select Salesperson, count(*)
+    -> from Sales
+    -> group by Salesperson
+    -> having count(*)>1;
++-------------+----------+
+| Salesperson | count(*) |
++-------------+----------+
+| Alice       |        2 |
+| Bob         |        2 |
+| Carol       |        2 |
++-------------+----------+
+3 rows in set (0.000 sec)
+
+MariaDB [company]> select Region
+    -> from Sales
+    -> order by count(Region) desc
+    -> limit 1;
++--------+
+| Region |
++--------+
+| North  |
++--------+
+1 row in set (0.000 sec)
+MariaDB [company]> select Region,count(Sales_amount)
+    -> from Sales
+    -> group by Region;
++--------+---------------------+
+| Region | count(Sales_amount) |
++--------+---------------------+
+| East   |                   2 |
+| North  |                   2 |
+| South  |                   2 |
+| West   |                   1 |
++--------+---------------------+
+4 rows in set (0.000 sec)
+
+MariaDB [company]> select Region,count(Sales_amount) as sales_count
+    -> from sales
+    -> group by Region
+    -> order by sales_count desc
+    -> limit 1;
++--------+-------------+
+| Region | sales_count |
++--------+-------------+
+| East   |           2 |
++--------+-------------+
+1 row in set (0.001 sec)
+MariaDB [company]> Select salesperson,sum(Sales_amount) from Sales
+    -> order by sum(Sales_amount) desc
+    -> ;
++-------------+-------------------+
+| salesperson | sum(Sales_amount) |
++-------------+-------------------+
+| Alice       |              8450 |
++-------------+-------------------+
+1 row in set (0.000 sec)
+
+MariaDB [company]> Select salesperson,sum(Sales_amount) as total from Sales
+    -> group by Salesperson
+    -> order by sum(Sales_amount) desc
+    -> ;
++-------------+-------+
+| salesperson | total |
++-------------+-------+
+| Alice       |  2700 |
+| Carol       |  2000 |
+| Dave        |  2000 |
+| Bob         |  1750 |
++-------------+-------+
+4 rows in set (0.000 sec)
+
+MariaDB [company]> Select salesperson,sum(Sales_amount) as total from Sales
+    -> group by salesperson
+    -> order by total desc;
++-------------+-------+
+| salesperson | total |
++-------------+-------+
+| Alice       |  2700 |
+| Dave        |  2000 |
+| Carol       |  2000 |
+| Bob         |  1750 |
++-------------+-------+
+4 rows in set (0.000 sec)
+MariaDB [company]> select Salesperson,avg(Sales_amount) from Sales
+    -> group by Salesperson
+    -> having avg(Sales_amount) > 1000;
++-------------+-------------------+
+| Salesperson | avg(Sales_amount) |
++-------------+-------------------+
+| Alice       |         1350.0000 |
+| Dave        |         2000.0000 |
++-------------+-------------------+
+2 rows in set (0.001 sec)
+
+MariaDB [company]>
+MariaDB [company]> select Region,count(*) from Sales where Sales_date = '2024-12-03'
+    -> group by Region;
++--------+----------+
+| Region | count(*) |
++--------+----------+
+| South  |        1 |
+| West   |        1 |
++--------+----------+
+2 rows in set (0.001 sec)
+
+
+MariaDB [company]> select distinct Sales_amount from Sales;
++--------------+
+| Sales_amount |
++--------------+
+|         1200 |
+|          800 |
+|         1500 |
+|          700 |
+|         2000 |
+|          950 |
+|         1300 |
++--------------+
+7 rows in set (0.000 sec)
