@@ -1,0 +1,247 @@
+MariaDB [(none)]> create database uov;
+Query OK, 1 row affected (0.003 sec)
+
+MariaDB [(none)]> use uov;
+Database changed
+MariaDB [uov]> CREATE TABLE customers(
+    -> customerID INT Primary key,
+    -> customerName VARCHAR(100),
+    -> city VARCHAR(50));
+Query OK, 0 rows affected (0.011 sec)
+
+MariaDB [uov]> DESC customers;
++--------------+--------------+------+-----+---------+-------+
+| Field        | Type         | Null | Key | Default | Extra |
++--------------+--------------+------+-----+---------+-------+
+| customerID   | int(11)      | NO   | PRI | NULL    |       |
+| customerName | varchar(100) | YES  |     | NULL    |       |
+| city         | varchar(50)  | YES  |     | NULL    |       |
++--------------+--------------+------+-----+---------+-------+
+3 rows in set (0.015 sec)
+
+MariaDB [uov]> CREATE TABLE orders(
+    -> orderID INT Primary key,
+    -> orderDate DATE,
+    -> customerID INT,
+    -> amount DECIMAL(10,2),
+    -> FOREIGN KEY(customerID) REFERENCES customers(customerID));
+Query OK, 0 rows affected (0.030 sec)
+
+MariaDB [uov]> DESC orders;
++------------+---------------+------+-----+---------+-------+
+| Field      | Type          | Null | Key | Default | Extra |
++------------+---------------+------+-----+---------+-------+
+| orderID    | int(11)       | NO   | PRI | NULL    |       |
+| orderDate  | date          | YES  |     | NULL    |       |
+| customerID | int(11)       | YES  | MUL | NULL    |       |
+| amount     | decimal(10,2) | YES  |     | NULL    |       |
++------------+---------------+------+-----+---------+-------+
+4 rows in set (0.014 sec)
+MariaDB [uov]> INSERT INTO orders VALUES
+    -> (101,'21-05-2025',1,25000),
+    -> (102,'22-05-2025',1,30000),
+    -> (103,'22-05-2025',2,40000);
+Query OK, 3 rows affected, 3 warnings (0.004 sec)
+Records: 3  Duplicates: 0  Warnings: 3
+
+MariaDB [uov]> SELECT * FROM customers;
++------------+--------------+---------+
+| customerID | customerName | city    |
++------------+--------------+---------+
+|          1 | Alice        | Colombo |
+|          2 | Bob          | Jaffna  |
++------------+--------------+---------+
+2 rows in set (0.000 sec)
+MariaDB [uov]> INSERT INTO orders VALUES
+    ->  (101,'2025-05-21',1,25000),
+    -> (102,'2025-05-22',1,30000),
+    -> (103,'2025-05-22',2,40000);
+Query OK, 3 rows affected (0.004 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+MariaDB [uov]> select * from ORDERS;
++---------+------------+------------+----------+
+| orderID | orderDate  | customerID | amount   |
++---------+------------+------------+----------+
+|     101 | 2025-05-21 |          1 | 25000.00 |
+|     102 | 2025-05-22 |          1 | 30000.00 |
+|     103 | 2025-05-22 |          2 | 40000.00 |
++---------+------------+------------+----------+
+3 rows in set (0.000 sec)
+MariaDB [uov]> DROP TABLE customers;
+ERROR 1451 (23000): Cannot delete or update a parent row: a foreign key constraint fails
+
+MariaDB [uov]> DELETE FROM customers WHERE customerId=1;
+ERROR 1451 (23000): Cannot delete or update a parent row: a foreign key constraint fails (`uov`.`orders`, CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`customerID`) REFERENCES `customers` (`customerID`))
+MariaDB [uov]> select * from customers;
++------------+--------------+---------+
+| customerID | customerName | city    |
++------------+--------------+---------+
+|          1 | Alice        | Colombo |
+|          2 | Bob          | Jaffna  |
++------------+--------------+---------+
+2 rows in set (0.000 sec)
+
+MariaDB [uov]> DELETE FROM orders WHERE customerId=1;
+Query OK, 2 rows affected (0.003 sec)
+
+MariaDB [uov]> SELECT * FROM orders;
++---------+------------+------------+----------+
+| orderID | orderDate  | customerID | amount   |
++---------+------------+------------+----------+
+|     103 | 2025-05-22 |          2 | 40000.00 |
++---------+------------+------------+----------+
+1 row in set (0.000 sec)
+MariaDB [uov]> DELETE FROM customers WHERE customerID=1;
+Query OK, 1 row affected (0.004 sec)
+
+MariaDB [uov]> SELECT * FROM customers;
++------------+--------------+--------+
+| customerID | customerName | city   |
++------------+--------------+--------+
+|          2 | Bob          | Jaffna |
++------------+--------------+--------+
+1 row in set (0.000 sec)
+
+
+MariaDB [uov]> CREATE TABLE students(
+    -> studentID INT Primary key,
+    -> Fname VARCHAR(50),
+    -> Lname VARCHAR(50),
+    -> City VARCHAR(50));
+Query OK, 0 rows affected (0.011 sec)
+
+MariaDB [uov]> DESC students;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| studentID | int(11)     | NO   | PRI | NULL    |       |
+| Fname     | varchar(50) | YES  |     | NULL    |       |
+| Lname     | varchar(50) | YES  |     | NULL    |       |
+| City      | varchar(50) | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+4 rows in set (0.012 sec)
+
+
+
+
+
+
+MariaDB [uov]> INSERT INTO students VALUES
+    -> (1,'Devine','Putin','France'),
+    -> (2,'Micheal','Clark','Australia'),
+    -> (3,'Ethon','Miller','England'),
+    -> (4,'Mark','Strauss','America');
+Query OK, 4 rows affected (0.004 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+MariaDB [uov]> SELECT * FROM students;
++-----------+---------+---------+-----------+
+| studentID | Fname   | Lname   | City      |
++-----------+---------+---------+-----------+
+|         1 | Devine  | Putin   | France    |
+|         2 | Micheal | Clark   | Australia |
+|         3 | Ethon   | Miller  | England   |
+|         4 | Mark    | Strauss | America   |
++-----------+---------+---------+-----------+
+4 rows in set (0.000 sec)
+
+MariaDB [uov]> CREATE TABLE technologies(
+    -> studentID INT,
+    -> techID INT Primary key,
+    ->  Name VARCHAR(50),
+    -> technology VARCHAR(100));
+Query OK, 0 rows affected (0.011 sec)
+
+MariaDB [uov]> INSERT INTO technologies VALUES
+    -> (1,1,'Java Training Inst','Java'),
+    -> (2,2,'Chroma Campus','Angular'),
+    -> (3,3,'CETPA Infotech','Bio data'),
+    -> (5,4,'Aptron','IOS'),
+    -> (6,5,'Faizabad','MangoDB');
+Query OK, 5 rows affected (0.005 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+MariaDB [uov]> DESC  technologies;
++------------+--------------+------+-----+---------+-------+
+| Field      | Type         | Null | Key | Default | Extra |
++------------+--------------+------+-----+---------+-------+
+| studentID  | int(11)      | YES  |     | NULL    |       |
+| techID     | int(11)      | NO   | PRI | NULL    |       |
+| Name       | varchar(50)  | YES  |     | NULL    |       |
+| technology | varchar(100) | YES  |     | NULL    |       |
++------------+--------------+------+-----+---------+-------+
+4 rows in set (0.014 sec)
+
+MariaDB [uov]> SELECT * FROM technologies;
++-----------+--------+--------------------+------------+
+| studentID | techID | Name               | technology |
++-----------+--------+--------------------+------------+
+|         1 |      1 | Java Training Inst | Java       |
+|         2 |      2 | Chroma Campus      | Angular    |
+|         3 |      3 | CETPA Infotech     | Bio data   |
+|         5 |      4 | Aptron             | IOS        |
+|         6 |      5 | Faizabad           | MangoDB    |
++-----------+--------+--------------------+------------+
+5 rows in set (0.000 sec)
+MariaDB [uov]> SELECT * FROM students
+    -> INNER JOIN technologies
+    -> ON students.studentID=technologies.studentID;
++-----------+---------+--------+-----------+-----------+--------+--------------------+------------+
+| studentID | Fname   | Lname  | City      | studentID | techID | Name               | technology |
++-----------+---------+--------+-----------+-----------+--------+--------------------+------------+
+|         1 | Devine  | Putin  | France    |         1 |      1 | Java Training Inst | Java       |
+|         2 | Micheal | Clark  | Australia |         2 |      2 | Chroma Campus      | Angular    |
+|         3 | Ethon   | Miller | England   |         3 |      3 | CETPA Infotech     | Bio data   |
++-----------+---------+--------+-----------+-----------+--------+--------------------+------------+
+3 rows in set (0.000 sec)
+
+MariaDB [uov]> SELECT * FROM students s
+    -> INNER JOIN technologies t
+    -> ON s.studentID = t.studentID;
++-----------+---------+--------+-----------+-----------+--------+--------------------+------------+
+| studentID | Fname   | Lname  | City      | studentID | techID | Name               | technology |
++-----------+---------+--------+-----------+-----------+--------+--------------------+------------+
+|         1 | Devine  | Putin  | France    |         1 |      1 | Java Training Inst | Java       |
+|         2 | Micheal | Clark  | Australia |         2 |      2 | Chroma Campus      | Angular    |
+|         3 | Ethon   | Miller | England   |         3 |      3 | CETPA Infotech     | Bio data   |
++-----------+---------+--------+-----------+-----------+--------+--------------------+------------+
+3 rows in set (0.000 sec)
+MariaDB [uov]> SELECT s.studentID,s.Fname,s.Lname,s.city,t.techID,t.Name,t.technology FROM students s
+    -> INNER JOIN technologies t
+    -> ON s.studentID = t.studentID;
++-----------+---------+--------+-----------+--------+--------------------+------------+
+| studentID | Fname   | Lname  | city      | techID | Name               | technology |
++-----------+---------+--------+-----------+--------+--------------------+------------+
+|         1 | Devine  | Putin  | France    |      1 | Java Training Inst | Java       |
+|         2 | Micheal | Clark  | Australia |      2 | Chroma Campus      | Angular    |
+|         3 | Ethon   | Miller | England   |      3 | CETPA Infotech     | Bio data   |
++-----------+---------+--------+-----------+--------+--------------------+------------+
+3 rows in set (0.000 sec)
+MariaDB [uov]> SELECT s.studentID,s.Fname,s.Lname,s.city,t.techID,t.Name,t.technology FROM students s
+    -> RIGHT JOIN technologies t
+    -> ON s.studentID = t.studentID;
++-----------+---------+--------+-----------+--------+--------------------+------------+
+| studentID | Fname   | Lname  | city      | techID | Name               | technology |
++-----------+---------+--------+-----------+--------+--------------------+------------+
+|         1 | Devine  | Putin  | France    |      1 | Java Training Inst | Java       |
+|         2 | Micheal | Clark  | Australia |      2 | Chroma Campus      | Angular    |
+|         3 | Ethon   | Miller | England   |      3 | CETPA Infotech     | Bio data   |
+|      NULL | NULL    | NULL   | NULL      |      4 | Aptron             | IOS        |
+|      NULL | NULL    | NULL   | NULL      |      5 | Faizabad           | MangoDB    |
++-----------+---------+--------+-----------+--------+--------------------+------------+
+5 rows in set (0.000 sec)
+
+MariaDB [uov]> SELECT s.studentID,s.Fname,s.Lname,s.city,t.techID,t.Name,t.technology FROM students s
+    -> LEFT JOIN technologies t
+    -> ON s.studentID = t.studentID;
++-----------+---------+---------+-----------+--------+--------------------+------------+
+| studentID | Fname   | Lname   | city      | techID | Name               | technology |
++-----------+---------+---------+-----------+--------+--------------------+------------+
+|         1 | Devine  | Putin   | France    |      1 | Java Training Inst | Java       |
+|         2 | Micheal | Clark   | Australia |      2 | Chroma Campus      | Angular    |
+|         3 | Ethon   | Miller  | England   |      3 | CETPA Infotech     | Bio data   |
+|         4 | Mark    | Strauss | America   |   NULL | NULL               | NULL       |
++-----------+---------+---------+-----------+--------+--------------------+------------+
+4 rows in set (0.000 sec)
+
