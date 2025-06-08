@@ -1,0 +1,362 @@
+..................QU1...................
+ CREATE DATABASE Electricity;
+Query OK, 1 row affected (0.006 sec)
+
+..................QU2...................
+Part(a)
+CREATE DATABASE Electricity;
+Query OK, 1 row affected (0.006 sec)
+MariaDB [(none)]> USE Electricity;
+Database changed
+
+MariaDB [Electricity]> CREATE TABLE Customers(
+    -> CustomerID VARCHAR(30) Primary key,
+    -> FirstName VARCHAR(50),
+    -> LastName VARCHAR(50),
+    -> Email VARCHAR(50),
+    -> PhoneNumber VARCHAR(30));
+Query OK, 0 rows affected (0.016 sec)
+
+MariaDB [Electricity]> DESC Customers;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| CustomerID  | varchar(30) | NO   | PRI | NULL    |       |
+| FirstName   | varchar(50) | YES  |     | NULL    |       |
+| LastName    | varchar(50) | YES  |     | NULL    |       |
+| Email       | varchar(50) | YES  |     | NULL    |       |
+| PhoneNumber | varchar(30) | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+5 rows in set (0.037 sec)
+
+MariaDB [Electricity]> CREATE TABLE Meters(
+    -> MeterID VARCHAR(30) Primary key,
+    -> CustomerID VARCHAR(30),
+    -> MeterType VARCHAR(50),
+    -> InstallationDate DATE,
+    -> MeterStatus VARCHAR(50),
+    -> FOREIGN KEY(CustomerID) REFERENCES
+    -> Customers(CustomerID));
+Query OK, 0 rows affected (0.046 sec)
+
+MariaDB [Electricity]> DESC Meters;
++------------------+-------------+------+-----+---------+-------+
+| Field            | Type        | Null | Key | Default | Extra |
++------------------+-------------+------+-----+---------+-------+
+| MeterID          | varchar(30) | NO   | PRI | NULL    |       |
+| CustomerID       | varchar(30) | YES  | MUL | NULL    |       |
+| MeterType        | varchar(50) | YES  |     | NULL    |       |
+| InstallationDate | date        | YES  |     | NULL    |       |
+| MaterStatus      | varchar(50) | YES  |     | NULL    |       |
++------------------+-------------+------+-----+---------+-------+
+5 rows in set (0.030 sec)
+
+MariaDB [Electricity]>  CREATE TABLE Readings(
+    -> ReadingID VARCHAR(10) Primary key,
+    -> MeterID VARCHAR(30),
+    -> ReadingDate DATE,
+    -> Readingvalue int,
+    -> FOREIGN KEY(MeterID) REFERENCES
+    -> Meters(MeterID));
+Query OK, 0 rows affected (0.032 sec)
+
+MariaDB [Electricity]> DESC Readings;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| ReadingID    | varchar(10) | NO   | PRI | NULL    |       |
+| MeterID      | varchar(30) | YES  | MUL | NULL    |       |
+| ReadingDate  | date        | YES  |     | NULL    |       |
+| Readingvalue | int(11)     | YES  |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+4 rows in set (0.037 sec)
+
+MariaDB [Electricity]> CREATE TABLE Invoices(
+    -> InvoiceID INT Primary key,
+    -> MeterID VARCHAR(30),
+    -> InvoiceDate DATE,
+    -> Amount int,
+    -> Status VARCHAR(30),
+    -> FOREIGN KEY(MeterID) REFERENCES
+    -> Meters(MeterID));
+Query OK, 0 rows affected (0.042 sec)
+
+MariaDB [Electricity]> DESC Invoices;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| InvoiceID   | int(11)     | NO   | PRI | NULL    |       |
+| MeterID     | varchar(30) | YES  | MUL | NULL    |       |
+| InvoiceDate | date        | YES  |     | NULL    |       |
+| Amount      | int(11)     | YES  |     | NULL    |       |
+| Status      | varchar(30) | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+5 rows in set (0.020 sec)
+
+Part(b)
+MariaDB [Electricity]> INSERT INTO Customers VALUES
+    -> ('C001','John','Smith','john.smith@gmail.com','077 4567890'),
+    -> ('C002','Sarah','Johnson','sarah.johnson@yahoo.com','077 5678901'),
+    -> ('C003','Michael','Brown','michael.brown@gmail.com','078 6789012'),
+    -> ('C004','Lewis','Young','George.Young@gmail.com','075 9874509'),
+    -> ('C005','George','Orwell','George.Orwell@gmail.com','076 6903243'),
+    -> ('C006','Cooper','Bailey','Cooper.Bailey@gmail.com','072 4582340');
+Query OK, 6 rows affected (0.052 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+MariaDB [Electricity]> INSERT INTO Meters VALUES
+    -> ('M001','C001','Residential','2021-01-15','Active'),
+    -> ('M002','C002','Commercial','2021-03-10','Active'),
+    -> ('M003','C003','Residential','2021-06-20','Inactive'),
+    -> ('M004','C004','Residential','2021-09-30','Active'),
+    -> ('M005','C005','Commercial','2021-12-08','Active'),
+    -> ('M006','C006','Residential','2022-01-03','Inactive'),
+    -> ('M007','C003','Residential','2023-06-29','Active'),
+    -> ('M008','C006','Residential','2013-07-03','Active');
+Query OK, 8 rows affected (0.015 sec)
+Records: 8  Duplicates: 0  Warnings: 0
+
+MariaDB [Electricity]> INSERT INTO Readings VALUES
+    -> ('R1','M001','2021-02-01',1000),
+    -> ('R2','M001','2021-03-01',1100),
+    -> ('R3','M002','2021-03-15',5000),
+    -> ('R4','M002','2021-06-08',5800),
+    -> ('R5','M004','2021-07-29',200),
+    -> ('R6','M004','2022-03-10',250),
+    -> ('R7','M005','2022-01-10',675),
+    -> ('R8','M002','2021-07-12',6100),
+    -> ('R9','M005','2022-02-15',850),
+    -> ('R10','M003','2021-07-13',150),
+    -> ('R11','M006','2022-02-08',300);
+Query OK, 11 rows affected (0.014 sec)
+Records: 11  Duplicates: 0  Warnings: 0
+
+MariaDB [Electricity]> INSERT INTO Invoices VALUES
+    -> (1,'M001','2021-03-05',100,'Paid'),
+    -> (2,'M002','2021-04-10',150,'Unpaid'),
+    -> (3,'M003','2021-07-05',200,'Unpaid'),
+    -> (4,'M004','2023-04-30',850,'Paid'),
+    -> (5,'M005','2022-02-12',350,'Paid'),
+    -> (6,'M006','2022-03-18',75,'Unpaid'),
+    -> (7,'M002','2022-08-12',350,'Unpaid'),
+    -> (8,'M005','2022-03-11',175,'Unpaid');
+Query OK, 8 rows affected (0.015 sec)
+Records: 8  Duplicates: 0  Warnings: 0
+
+MariaDB [Electricity]> SELECT * FROM Customers;
++------------+-----------+----------+-------------------------+-------------+
+| CustomerID | FirstName | LastName | Email                   | PhoneNumber |
++------------+-----------+----------+-------------------------+-------------+
+| C001       | John      | Smith    | john.smith@gmail.com    | 077 4567890 |
+| C002       | Sarah     | Johnson  | sarah.johnson@yahoo.com | 077 5678901 |
+| C003       | Michael   | Brown    | michael.brown@gmail.com | 078 6789012 |
+| C004       | Lewis     | Young    | George.Young@gmail.com  | 075 9874509 |
+| C005       | George    | Orwell   | George.Orwell@gmail.com | 076 6903243 |
+| C006       | Cooper    | Bailey   | Cooper.Bailey@gmail.com | 072 4582340 |
++------------+-----------+----------+-------------------------+-------------+
+6 rows in set (0.001 sec)
+
+MariaDB [Electricity]> SELECT * FROM Meters;
++---------+------------+-------------+------------------+-------------+
+| MeterID | CustomerID | MeterType   | InstallationDate | MeterStatus |
++---------+------------+-------------+------------------+-------------+
+| M001    | C001       | Residential | 2021-01-15       | Active      |
+| M002    | C002       | Commercial  | 2021-03-10       | Active      |
+| M003    | C003       | Residential | 2021-06-20       | Inactive    |
+| M004    | C004       | Residential | 2021-09-30       | Active      |
+| M005    | C005       | Commercial  | 2021-12-08       | Active      |
+| M006    | C006       | Residential | 2022-01-03       | Inactive    |
+| M007    | C003       | Residential | 2023-06-29       | Active      |
+| M008    | C006       | Residential | 2013-07-03       | Active      |
++---------+------------+-------------+------------------+-------------+
+8 rows in set (0.001 sec)
+
+MariaDB [Electricity]> SELECT * FROM Readings;
++-----------+---------+-------------+--------------+
+| ReadingID | MeterID | ReadingDate | Readingvalue |
++-----------+---------+-------------+--------------+
+| R1        | M001    | 2021-02-01  |         1000 |
+| R10       | M003    | 2021-07-13  |          150 |
+| R11       | M006    | 2022-02-08  |          300 |
+| R2        | M001    | 2021-03-01  |         1100 |
+| R3        | M002    | 2021-03-15  |         5000 |
+| R4        | M002    | 2021-06-08  |         5800 |
+| R5        | M004    | 2021-07-29  |          200 |
+| R6        | M004    | 2022-03-10  |          250 |
+| R7        | M005    | 2022-01-10  |          675 |
+| R8        | M002    | 2021-07-12  |         6100 |
+| R9        | M005    | 2022-02-15  |          850 |
++-----------+---------+-------------+--------------+
+11 rows in set (0.001 sec)
+
+MariaDB [Electricity]> SELECT * FROM Invoices;
++-----------+---------+-------------+--------+--------+
+| InvoiceID | MeterID | InvoiceDate | Amount | Status |
++-----------+---------+-------------+--------+--------+
+|         1 | M001    | 2021-03-05  |    100 | Paid   |
+|         2 | M002    | 2021-04-10  |    150 | Unpaid |
+|         3 | M003    | 2021-07-05  |    200 | Unpaid |
+|         4 | M004    | 2023-04-30  |    850 | Paid   |
+|         5 | M005    | 2022-02-12  |    350 | Paid   |
+|         6 | M006    | 2022-03-18  |     75 | Unpaid |
+|         7 | M002    | 2022-08-12  |    350 | Unpaid |
+|         8 | M005    | 2022-03-11  |    175 | Unpaid |
++-----------+---------+-------------+--------+--------+
+8 rows in set (0.001 sec)
+
+Part(c)
+MariaDB [Electricity]> SELECT CONCAT(c.FirstName," ",c.LastName),m.MeterType FROM Customers c
+    -> JOIN Meters m
+    -> ON c.CustomerID = m.CustomerID;
++------------------------------------+-------------+
+| CONCAT(c.FirstName," ",c.LastName) | MeterType   |
++------------------------------------+-------------+
+| John Smith                         | Residential |
+| Sarah Johnson                      | Commercial  |
+| Michael Brown                      | Residential |
+| Lewis Young                        | Residential |
+| George Orwell                      | Commercial  |
+| Cooper Bailey                      | Residential |
+| Michael Brown                      | Residential |
+| Cooper Bailey                      | Residential |
++------------------------------------+-------------+
+8 rows in set (0.002 sec)
+MariaDB [Electricity]> SELECT c.FirstName,c.LastName,m.MeterType FROM Customers c
+    -> JOIN Meters m
+    -> ON c.CustomerID = m.CustomerID;
++-----------+----------+-------------+
+| FirstName | LastName | MeterType   |
++-----------+----------+-------------+
+| John      | Smith    | Residential |
+| Sarah     | Johnson  | Commercial  |
+| Michael   | Brown    | Residential |
+| Lewis     | Young    | Residential |
+| George    | Orwell   | Commercial  |
+| Cooper    | Bailey   | Residential |
+| Michael   | Brown    | Residential |
+| Cooper    | Bailey   | Residential |
++-----------+----------+-------------+
+8 rows in set (0.001 sec)
+
+Part(d)
+MariaDB [Electricity]> SELECT c.CustomerID,c.FirstName,c.LastName,c.Email,c.PhoneNumber FROM Customers c
+    -> JOIN Meters m ON m.CustomerID = c.CustomerID
+    -> JOIN Invoices i ON i.MeterID = m.MeterID
+    -> GROUP BY c.CustomerID
+    -> ORDER BY SUM(i.Amount) DESC
+    -> LIMIT 1;
++------------+-----------+----------+------------------------+-------------+
+| CustomerID | FirstName | LastName | Email                  | PhoneNumber |
++------------+-----------+----------+------------------------+-------------+
+| C004       | Lewis     | Young    | George.Young@gmail.com | 075 9874509 |
++------------+-----------+----------+------------------------+-------------+
+1 row in set (0.002 sec)
+
+Part(e)
+MariaDB [Electricity]> SELECT c.FirstName,m.MeterType FROM Customers c
+    -> JOIN Meters m ON m.CustomerID = c.CustomerID
+    -> JOIN Invoices i ON i.MeterID = m.MeterID
+    -> WHERE Status = 'Paid';
++-----------+-------------+
+| FirstName | MeterType   |
++-----------+-------------+
+| John      | Residential |
+| Lewis     | Residential |
+| George    | Commercial  |
++-----------+-------------+
+
+Part(f)
+MariaDB [Electricity]> SELECT c.FirstName,m.MeterType FROM Customers c
+    -> JOIN Meters m ON m.CustomerID = c.CustomerID
+    -> WHERE m.MeterStatus = 'Active';
++-----------+-------------+
+| FirstName | MeterType   |
++-----------+-------------+
+| John      | Residential |
+| Sarah     | Commercial  |
+| Lewis     | Residential |
+| George    | Commercial  |
+| Michael   | Residential |
+| Cooper    | Residential |
++-----------+-------------+
+6 rows in set (0.002 sec)
+
+Part(g)
+MariaDB [Electricity]> SELECT c.FirstName,m.MeterType,SUM(i.Amount) AS TotalAmount FROM Customers c
+    -> JOIN Meters m ON m.CustomerID = c.CustomerID
+    -> JOIN Invoices i ON i.MeterID = m.MeterID
+    -> WHERE i.Status = 'Unpaid'
+    -> GROUP BY m.MeterID
+    -> HAVING COUNT(i.InvoiceID) >= 2;
++-----------+------------+-------------+
+| FirstName | MeterType  | TotalAmount |
++-----------+------------+-------------+
+| Sarah     | Commercial |         500 |
++-----------+------------+-------------+
+1 row in set (0.003 sec)
+
+Part(h)
+
+MariaDB [Electricity]> SELECT c.CustomerID,i.InvoiceDate FROM Customers c
+    -> JOIN Meters m ON m.CustomerID = c.CustomerID
+    -> JOIN Invoices i ON i.MeterID = m.MeterID
+    -> WHERE Status = 'Unpaid' AND MeterStatus = 'Active';
++------------+-------------+
+| CustomerID | InvoiceDate |
++------------+-------------+
+| C002       | 2021-04-10  |
+| C002       | 2022-08-12  |
+| C005       | 2022-03-11  |
++------------+-------------+
+3 rows in set (0.002 sec)
+
+Part(i)
+MariaDB [Electricity]> SELECT m.MeterID,MAX(r.ReadingDate) AS LastReadingDate  FROM Readings r
+    -> JOIN Meters m ON r.MeterID = m.MeterID
+    -> GROUP BY MeterID;
++---------+-----------------+
+| MeterID | LastReadingDate |
++---------+-----------------+
+| M001    | 2021-03-01      |
+| M002    | 2021-07-12      |
+| M003    | 2021-07-13      |
+| M004    | 2022-03-10      |
+| M005    | 2022-02-15      |
+| M006    | 2022-02-08      |
++---------+-----------------+
+6 rows in set (0.001 sec)
+MariaDB [Electricity]> SELECT r.MeterId, MAX(r.ReadingDate) AS LastReadingDate,
+    -> (SELECT r2.ReadingValue
+    -> FROM Readings r2
+    -> WHERE r2.MeterId = r.MeterId
+    -> ORDER BY r2.ReadingDate DESC
+    -> LIMIT 1) AS LastReadingValue
+    -> FROM Readings r
+    -> GROUP BY r.MeterId;
++---------+-----------------+------------------+
+| MeterId | LastReadingDate | LastReadingValue |
++---------+-----------------+------------------+
+| M001    | 2021-03-01      |             1100 |
+| M002    | 2021-07-12      |             6100 |
+| M003    | 2021-07-13      |              150 |
+| M004    | 2022-03-10      |              250 |
+| M005    | 2022-02-15      |              850 |
+| M006    | 2022-02-08      |              300 |
++---------+-----------------+------------------+
+6 rows in set (0.001 sec)
+
+Part(j)
+MariaDB [Electricity]> SELECT DISTINCT c.FirstName, m.MeterType, SUM(i.Amount) AS TotalAmount
+    -> FROM Customers c
+    -> JOIN Meters m ON c.CustomerId = m.CustomerId
+    -> JOIN Invoices i ON m.MeterId = i.MeterId
+    -> JOIN Readings r ON m.MeterId = r.MeterId
+    -> WHERE r.ReadingValue > 1000
+    -> GROUP BY m.MeterId
+    -> HAVING SUM(i.Status = 'Unpaid') = 0;
++-----------+-------------+-------------+
+| FirstName | MeterType   | TotalAmount |
++-----------+-------------+-------------+
+| John      | Residential |         100 |
++-----------+-------------+-------------+
+1 row in set (0.002 sec)
