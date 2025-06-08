@@ -1,0 +1,207 @@
+MariaDB [StudentDB2]> CREATE TABLE Employee(
+    -> EmployeeID Char(5) Primary key,
+    -> Name VARCHAR(50),
+    -> Department VARCHAR(50),
+    -> Salary INT);
+Query OK, 0 rows affected (0.011 sec)
+
+MariaDB [StudentDB2]> DESC Employee;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| EmployeeID | char(5)     | NO   | PRI | NULL    |       |
+| Name       | varchar(50) | YES  |     | NULL    |       |
+| Department | varchar(50) | YES  |     | NULL    |       |
+| Salary     | int(11)     | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+4 rows in set (0.015 sec)
+
+MariaDB [StudentDB2]> INSERT INTO Employee VALUES
+    -> ('E001','Alice','HR',50000),
+    -> ('E002','Bob','IT',60000),
+    -> ('E003','Carol','IT',70000),
+    -> ('E004','David','HR',45000),
+    -> ('E005','Eva','IT',55000);
+Query OK, 5 rows affected (0.034 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+MariaDB [StudentDB2]> SELECT * FROM Employee;
++------------+-------+------------+--------+
+| EmployeeID | Name  | Department | Salary |
++------------+-------+------------+--------+
+| E001       | Alice | HR         |  50000 |
+| E002       | Bob   | IT         |  60000 |
+| E003       | Carol | IT         |  70000 |
+| E004       | David | HR         |  45000 |
+| E005       | Eva   | IT         |  55000 |
++------------+-------+------------+--------+
+5 rows in set (0.000 sec)
+
+MariaDB [StudentDB2]> SELECT Name FROM Employee
+    -> WHERE Salary> (SELECT AVG(Salary) FROM Employee);
++-------+
+| Name  |
++-------+
+| Bob   |
+| Carol |
++-------+
+2 rows in set (0.001 sec)
+
+MariaDB [StudentDB2]> SELECT EmployeeID,Name,Salary FROM Employee
+    -> WHERE Salary> (SELECT AVG(Salary) FROM Employee);
++------------+-------+--------+
+| EmployeeID | Name  | Salary |
++------------+-------+--------+
+| E002       | Bob   |  60000 |
+| E003       | Carol |  70000 |
++------------+-------+--------+
+2 rows in set (0.000 sec)
+
+MariaDB [StudentDB2]> SELECT EmployeeID,Name FROM Employee
+    -> WHERE Salary > ANY( SELECT Salary FROM Employee WHERE Department='HR');
++------------+-------+
+| EmployeeID | Name  |
++------------+-------+
+| E001       | Alice |
+| E002       | Bob   |
+| E003       | Carol |
+| E005       | Eva   |
++------------+-------+
+4 rows in set (0.001 sec)
+
+MariaDB [StudentDB2]> SELECT EmployeeID,Name FROM Employee
+    -> WHERE Salary > ALL( SELECT Salary FROM Employee WHERE Department='HR');
++------------+-------+
+| EmployeeID | Name  |
++------------+-------+
+| E002       | Bob   |
+| E003       | Carol |
+| E005       | Eva   |
++------------+-------+
+3 rows in set (0.000 sec)
+MariaDB [StudentDB2]> SELECT DISTINCT Department FROM Employee
+    -> WHERE Salary > (SELECT Department WHERE Salary > 65000);
++------------+
+| Department |
++------------+
+| IT         |
++------------+
+1 row in set, 1 warning (0.000 sec)
+
+MariaDB [StudentDB2]> SELECT DISTINCT Department,Salary FROM Employee
+    -> WHERE Salary > (SELECT Department WHERE Salary > 65000);
++------------+--------+
+| Department | Salary |
++------------+--------+
+| IT         |  70000 |
++------------+--------+
+1 row in set, 1 warning (0.000 sec)
+
+MariaDB [StudentDB2]> SELECT DISTINCT Department FROM Employee e1
+    -> WHERE EXISTS(SELECT * FROM Employee e2
+    -> WHERE e2.Department=e1.Department AND e2.Salary > 65000);
++------------+
+| Department |
++------------+
+| IT         |
++------------+
+1 row in set (0.001 sec)
+
+
+MariaDB [StudentDB2]> CREATE TABLE Students
+    -> (StudentID CHAR(5),
+    -> Name VARCHAR(30),
+    -> Department VARCHAR(50));
+Query OK, 0 rows affected (0.013 sec)
+
+MariaDB [StudentDB2]> DESC Students;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| StudentID  | char(5)     | YES  |     | NULL    |       |
+| Name       | varchar(30) | YES  |     | NULL    |       |
+| Department | varchar(50) | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+3 rows in set (0.014 sec)
+
+MariaDB [StudentDB2]> INSERT INTO Students VALUES
+    -> ('S001','Alice','CS'),
+    -> ('S002','Bob','IT'),
+    -> ('S003','Carol','CS'),
+    -> ('S004','David','ECE');
+Query OK, 4 rows affected (0.004 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+MariaDB [StudentDB2]> SELECT * FROM Students;
++-----------+-------+------------+
+| StudentID | Name  | Department |
++-----------+-------+------------+
+| S001      | Alice | CS         |
+| S002      | Bob   | IT         |
+| S003      | Carol | CS         |
+| S004      | David | ECE        |
++-----------+-------+------------+
+4 rows in set (0.000 sec)
+
+MariaDB [StudentDB2]> CREATE TABLE Marks(
+    -> StudentID CHAR(5),
+    -> Subject VARCHAR(30),
+    -> Marks INT);
+Query OK, 0 rows affected (0.012 sec)
+
+MariaDB [StudentDB2]> ALTER TABLE Marks ADD FOREIGN KEY(StudentID) REFERENCES Students(StudentID);
+Query OK, 0 rows affected (0.052 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+MariaDB [StudentDB2]> DESC Marks;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| StudentID | char(5)     | YES  | MUL | NULL    |       |
+| Subject   | varchar(30) | YES  |     | NULL    |       |
+| Marks     | int(11)     | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+3 rows in set (0.014 sec)
+
+MariaDB [StudentDB2]> INSERT INTO Marks VALUES
+    -> ('S001','DBMS',78),
+    -> ('S001','OS',85),
+    -> ('S002','DBMS',70),
+    -> ('S003','DBMS',92),
+    -> ('S004','OS',68);
+Query OK, 5 rows affected (0.004 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+MariaDB [StudentDB2]> SELECT * FROM Marks;
++-----------+---------+-------+
+| StudentID | Subject | Marks |
++-----------+---------+-------+
+| S001      | DBMS    |    78 |
+| S001      | OS      |    85 |
+| S002      | DBMS    |    70 |
+| S003      | DBMS    |    92 |
+| S004      | OS      |    68 |
++-----------+---------+-------+
+5 rows in set (0.000 sec)
+MariaDB [StudentDB2]> SELECT Name FROM Students s
+    -> JOIN Marks m ON m.StudentID = s.StudentID
+    -> WHERE Marks > ANY(SELECT Marks FROM Marks WHERE StudentID = 'S002');
++-------+
+| Name  |
++-------+
+| Alice |
+| Alice |
+| Carol |
++-------+
+3 rows in set (0.001 sec)
+MariaDB [StudentDB2]> SELECT * FROM Students s
+    -> JOIN Marks m ON m.StudentID = s.StudentID;
++-----------+-------+------------+-----------+---------+-------+
+| StudentID | Name  | Department | StudentID | Subject | Marks |
++-----------+-------+------------+-----------+---------+-------+
+| S001      | Alice | CS         | S001      | DBMS    |    78 |
+| S001      | Alice | CS         | S001      | OS      |    85 |
+| S002      | Bob   | IT         | S002      | DBMS    |    70 |
+| S003      | Carol | CS         | S003      | DBMS    |    92 |
+| S004      | David | ECE        | S004      | OS      |    68 |
++-----------+-------+------------+-----------+---------+-------+
+5 rows in set (0.001 sec)
